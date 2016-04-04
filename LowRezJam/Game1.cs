@@ -13,7 +13,11 @@ namespace LowRezJam
         SpriteBatch spriteBatch;
         RenderTarget2D scene;
         Texture2D test;
-        
+        SpriteFont fipps;
+        GameState gameState;
+
+        enum GameState {Menu, Game}
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -21,8 +25,8 @@ namespace LowRezJam
             graphics.PreferredBackBufferHeight = 640;   // set this value to the desired height of your window
             graphics.ApplyChanges();
             Content.RootDirectory = "Content";
-            
-            
+
+            gameState = GameState.Game;
             
         }
 
@@ -41,6 +45,7 @@ namespace LowRezJam
             // TODO: use this.Content to load your game content here
             scene = new RenderTarget2D(graphics.GraphicsDevice, 64, 64);
             test = this.Content.Load<Texture2D>("test.jpg");
+            fipps = this.Content.Load<SpriteFont>("Fonts/Fipps");
         }
       
         protected override void UnloadContent()
@@ -68,16 +73,25 @@ namespace LowRezJam
             #endregion
             //Inside here is the game rendering ----------------------
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             spriteBatch.Begin();
-            spriteBatch.Draw(test, new Vector2(0, 0), Color.White);
-            spriteBatch.End();
+            if (gameState == GameState.Menu)
+            {
+                //spriteBatch.DrawString(fipps, "Go", new Vector2(0, 0), Color.White);
+            }
+            else if (gameState == GameState.Game)
+            {
 
+                
+                spriteBatch.Draw(test, new Rectangle(0, 0, 64, 64), Color.White);
+                
+            }
             //--------------------------------------------------------
+            spriteBatch.End();
             #region Draw Finish
             GraphicsDevice.SetRenderTarget(null);
             //Draw screen
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);
+            //spriteBatch.Begin();
             spriteBatch.Draw(scene, new Rectangle(0, 0, 640, 640), Color.White);
             spriteBatch.End();
             
