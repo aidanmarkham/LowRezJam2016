@@ -2,12 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-
 namespace LowRezJam
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -40,6 +36,9 @@ namespace LowRezJam
 
         enum GameState { Menu, Options, Credits, Game }
 
+        GameScreen screen;
+
+        enum GameScreen {Game, Dialog, Crafting, Inventory};
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -50,7 +49,7 @@ namespace LowRezJam
 
 
             gameState = GameState.Menu;
-
+            screen = GameScreen.Game;
         }
 
         protected override void Initialize()
@@ -181,7 +180,30 @@ namespace LowRezJam
             #region Game
             else if (gameState == GameState.Game)
             {
+                #region Game
+                if (screen == GameScreen.Game)
+                {
 
+                }
+                #endregion
+                #region Dialog
+                else if (screen == GameScreen.Dialog)
+                {
+                  
+                }
+                #endregion
+                #region Crafting
+                else if (screen == GameScreen.Crafting)
+                {
+
+                }
+                #endregion
+                #region Inventory
+                else if (screen == GameScreen.Inventory)
+                {
+
+                }
+                #endregion
             }
             #endregion
             #region Credits
@@ -235,8 +257,31 @@ namespace LowRezJam
             else if (gameState == GameState.Game)
             {
 
+                #region Game
+                if (screen == GameScreen.Game)
+                {
+                    spriteBatch.Draw(test, new Rectangle(0, 0, 64, 64), Color.White);
+                }
+                #endregion
+                #region Dialog
+                else if (screen == GameScreen.Dialog)
+                {
 
-                spriteBatch.Draw(test, new Rectangle(0, 0, 64, 64), Color.White);
+                }
+                #endregion
+                #region Crafting
+                else if (screen == GameScreen.Crafting)
+                {
+
+                }
+                #endregion
+                #region Inventory
+                else if (screen == GameScreen.Inventory)
+                {
+
+                }
+                #endregion
+                
 
             }
             #endregion
