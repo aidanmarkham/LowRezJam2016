@@ -11,6 +11,7 @@ namespace LowRezJam
         RenderTarget2D scene;
         Texture2D test;
         SpriteFont fipps;
+        
 
         KeyboardState keyboard;
         KeyboardState oldkeyboard;
@@ -31,7 +32,12 @@ namespace LowRezJam
         int sfxStat;
         Texture2D credits;
         #endregion
-
+        #region Game Instantiation
+        Texture2D dialogBG;
+        Texture2D gameFrame;
+        Texture2D inventoryBG;
+        Texture2D craftingBG;
+        #endregion
         GameState gameState;
 
         enum GameState { Menu, Options, Credits, Game }
@@ -75,6 +81,7 @@ namespace LowRezJam
             scene = new RenderTarget2D(graphics.GraphicsDevice, 64, 64);
             test = this.Content.Load<Texture2D>("test.jpg");
             fipps = this.Content.Load<SpriteFont>("Fonts/Fipps");
+            //handy = this.Content.Load<SpriteFont>("Fonts/Handy");
 
             #region Menu Image Loading
             menuBG = this.Content.Load<Texture2D>("MenuContent/Main/MenuBG.png");
@@ -93,7 +100,11 @@ namespace LowRezJam
             sfxStatus.Add(this.Content.Load<Texture2D>("MenuContent/Options/OptionsOFF2.png"));
             credits = this.Content.Load<Texture2D>("MenuContent/Options/credits.png");
             #endregion
-
+            #region Game Image Loading
+            dialogBG = this.Content.Load<Texture2D>("Game/Dialog.png");
+            gameFrame = this.Content.Load<Texture2D>("Game/Frame.png");
+            inventoryBG = this.Content.Load<Texture2D>("Game/Inv.png");
+            #endregion
         }
 
         protected override void UnloadContent()
@@ -180,6 +191,23 @@ namespace LowRezJam
             #region Game
             else if (gameState == GameState.Game)
             {
+                if (keyboard.IsKeyDown(Keys.A) && oldkeyboard.IsKeyDown(Keys.A))
+                {
+                    screen = GameScreen.Game;
+                }
+                else if (keyboard.IsKeyDown(Keys.S) && oldkeyboard.IsKeyDown(Keys.S))
+                {
+                    screen = GameScreen.Inventory;
+                }
+                else if (keyboard.IsKeyDown(Keys.D) && oldkeyboard.IsKeyDown(Keys.D))
+                {
+                    screen = GameScreen.Dialog;
+                }
+                else if (keyboard.IsKeyDown(Keys.F) && oldkeyboard.IsKeyDown(Keys.F))
+                {
+                    screen = GameScreen.Crafting;
+                }
+
                 #region Game
                 if (screen == GameScreen.Game)
                 {
@@ -229,7 +257,7 @@ namespace LowRezJam
             #endregion
             //Inside here is the game rendering ----------------------
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
             #region Menu
             if (gameState == GameState.Menu)
             {
@@ -260,13 +288,15 @@ namespace LowRezJam
                 #region Game
                 if (screen == GameScreen.Game)
                 {
-                    spriteBatch.Draw(test, new Rectangle(0, 0, 64, 64), Color.White);
+                    spriteBatch.Draw(gameFrame, new Vector2(0, 0), Color.White);
+                    //spriteBatch.Draw(test, new Rectangle(0, 0, 64, 64), Color.White);
+                    //spriteBatch.DrawString(handy, "Handy", new Vector2(0, 0), Color.White);
                 }
                 #endregion
                 #region Dialog
                 else if (screen == GameScreen.Dialog)
                 {
-
+                    spriteBatch.Draw(dialogBG, new Vector2(0, 0), Color.White);
                 }
                 #endregion
                 #region Crafting
@@ -278,7 +308,7 @@ namespace LowRezJam
                 #region Inventory
                 else if (screen == GameScreen.Inventory)
                 {
-
+                    spriteBatch.Draw(inventoryBG, new Vector2(0, 0), Color.White);
                 }
                 #endregion
                 
