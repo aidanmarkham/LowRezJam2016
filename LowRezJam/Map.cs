@@ -71,10 +71,19 @@ namespace LowRezJam
         }
         public void Draw(Vector2 location, Rectangle drawArea, SpriteBatch sb)
         {
-            Vector2 center = new Vector2(drawArea.X + drawArea.Width/2, drawArea.Y + drawArea.Height/2);
+            Vector2 center = new Vector2(drawArea.X + drawArea.Width/2 , drawArea.Y + drawArea.Height/2);
 
-            Vector2 drawLoc = center - location;
-            sb.Draw(texture, drawLoc, Color.White);
+            Vector2 drawLoc = center - location*2;
+            drawLoc.X--;
+            drawLoc.Y--;
+
+            Rectangle draw = new Rectangle((int)drawLoc.X, (int)drawLoc.Y, texture.Width * 2, texture.Height * 2);
+            sb.Draw(texture, draw, Color.White);
+        }
+        public Block[,] Data
+        {
+            get { return data; }
+            set { data = value; }
         }
     }
 }

@@ -9,13 +9,14 @@ namespace LowRezJam
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         RenderTarget2D scene;
-        
-        SpriteFont fipps;
 
+        SpriteFont fipps;
+        Player player;
         Map test;
 
         KeyboardState keyboard;
         KeyboardState oldkeyboard;
+
 
 
         #region Menu Instantiation
@@ -38,6 +39,7 @@ namespace LowRezJam
         Texture2D gameFrame;
         Texture2D inventoryBG;
         Texture2D craftingBG;
+        Texture2D light;
         #endregion
         GameState gameState;
 
@@ -61,7 +63,6 @@ namespace LowRezJam
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             menuOptions = new List<Texture2D>();
             optionsOptions = new List<Texture2D>();
             musicStatus = new List<Texture2D>();
@@ -71,12 +72,34 @@ namespace LowRezJam
             base.Initialize();
             menuOption = 0;
             optionsOption = 0;
+            player = new Player();
+            test = new Map(500, GraphicsDevice);
+            test.Generate();
+
+            test.Data = player.DigStart(test.Data, 3);
+            
         }
 
         protected override void LoadContent()
         {
+
+
+
+
+
+
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+
+
+
+           
+
+
+
+
 
             // TODO: use this.Content to load your game content here
             scene = new RenderTarget2D(graphics.GraphicsDevice, 64, 64);
@@ -84,8 +107,8 @@ namespace LowRezJam
             fipps = this.Content.Load<SpriteFont>("Fonts/Fipps");
             //handy = this.Content.Load<SpriteFont>("Fonts/Handy");
 
-            test = new Map(52, GraphicsDevice);
-            test.Generate();
+            
+            
             #region Menu Image Loading
             menuBG = this.Content.Load<Texture2D>("MenuContent/Main/MenuBG.png");
             menuOptions.Add(this.Content.Load<Texture2D>("MenuContent/Main/MenuOption1.png"));
@@ -108,6 +131,7 @@ namespace LowRezJam
             gameFrame = this.Content.Load<Texture2D>("Game/Frame.png");
             inventoryBG = this.Content.Load<Texture2D>("Game/Inv.png");
             craftingBG = this.Content.Load<Texture2D>("Game/Craft.png");
+            light = this.Content.Load<Texture2D>("Game/Light.png");
             #endregion
         }
 
@@ -195,6 +219,8 @@ namespace LowRezJam
             #region Game
             else if (gameState == GameState.Game)
             {
+
+                
                 if (keyboard.IsKeyDown(Keys.A) && oldkeyboard.IsKeyDown(Keys.A))
                 {
                     screen = GameScreen.Game;
@@ -216,6 +242,7 @@ namespace LowRezJam
                 if (screen == GameScreen.Game)
                 {
                     test.UpdateImage();
+                    player.Update(keyboard, oldkeyboard, test.Data);
                 }
                 #endregion
                 #region Dialog
@@ -260,7 +287,7 @@ namespace LowRezJam
             GraphicsDevice.SetRenderTarget(scene);
             #endregion
             //Inside here is the game rendering ----------------------
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, null);
             #region Menu
             if (gameState == GameState.Menu)
@@ -292,7 +319,8 @@ namespace LowRezJam
                 #region Game
                 if (screen == GameScreen.Game)
                 {
-                    test.Draw(new Vector2(26, 26), new Rectangle(6, 6, 52, 52), spriteBatch);
+                    spriteBatch.Draw(light, new Vector2(0, 0), new Color(255, 255, 255) * player.LightStrength);
+                    test.Draw(player.Location, new Rectangle(6, 6, 52, 52), spriteBatch);
                     spriteBatch.Draw(gameFrame, new Vector2(0, 0), Color.White);
                     
                     //spriteBatch.Draw(test, new Rectangle(0, 0, 64, 64), Color.White);
@@ -302,7 +330,7 @@ namespace LowRezJam
                 #region Dialog
                 else if (screen == GameScreen.Dialog)
                 {
-                    spriteBatch.Draw(dialogBG, new Vector2(0, 0), Color.White);
+                    spriteBatch.Draw(dialogBG, new Vector2(0,0), Color.White);
                 }
                 #endregion
                 #region Crafting
