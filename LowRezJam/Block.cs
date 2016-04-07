@@ -21,23 +21,30 @@ namespace LowRezJam
         }
         public Block(int blockID)
         {
+            id = blockID;
             if (blockID == 999)
             {
-                id = blockID;
                 name = "Edge";
                 rareness = 0;
                 drawColor = Color.Red;
             }
+            if(blockID == -1)
+            {
+
+                name = "Air";
+                rareness = 0;
+                drawColor = new Color(0, 0, 0, 0);
+            }
             if (blockID == 0)
             {
-                id = blockID;
+                
                 name = "Stone";
                 rareness = 0;
                 drawColor = Color.Black;
             }
             if (blockID == 1)
             {
-                id = blockID;
+                
                 name = "Gravel";
                 rareness = 0;
                 drawColor = new Color(30,30,30);
@@ -48,6 +55,10 @@ namespace LowRezJam
         {
             get { return drawColor; }
             set { drawColor = value; }
+        }
+        public int Id
+        {
+            get { return id; }
         }
 
     }
